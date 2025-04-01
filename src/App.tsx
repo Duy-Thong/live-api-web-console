@@ -18,7 +18,8 @@ import { useRef, useState } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
-import { Altair } from "./components/altair/Altair";
+import { SpeechTranscription } from "./components/speech-transcription/SpeechTranscription";
+import { DeepgramTranscription } from "./components/deepgram-transcription/DeepgramTranscription";
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 
@@ -30,12 +31,20 @@ if (typeof API_KEY !== "string") {
 const host = "generativelanguage.googleapis.com";
 const uri = `wss://${host}/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent`;
 
+// Enum for page types
+enum PageType {
+  GEMINI = "gemini",
+  DEEPGRAM = "deepgram"
+}
+
 function App() {
   // this video reference is used for displaying the active stream, whether that is the webcam or screen capture
   // feel free to style as you see fit
   const videoRef = useRef<HTMLVideoElement>(null);
   // either the screen capture, the video or null, if null we hide it
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+  // Track current page/view
+  const [currentPage, setCurrentPage] = useState<PageType>(PageType.GEMINI);
 
   return (
     <div className="App">
@@ -43,9 +52,28 @@ function App() {
         <div className="streaming-console">
           <SidePanel />
           <main>
+            {/* Page Switcher */}
+            <div className="page-switcher">
+              <button 
+                className={cn("page-button", { active: currentPage === PageType.GEMINI })}
+                onClick={() => setCurrentPage(PageType.GEMINI)}
+              >
+                Gemini Transcription
+              </button>
+              <button 
+                className={cn("page-button", { active: currentPage === PageType.DEEPGRAM })}
+                onClick={() => setCurrentPage(PageType.DEEPGRAM)}
+              >
+                Deepgram Transcription
+              </button>
+            </div>
+
             <div className="main-app-area">
-              {/* APP goes here */}
-              <Altair />
+              {currentPage === PageType.GEMINI ? (
+                <SpeechTranscription />
+              ) : (
+                <DeepgramTranscription />
+              )}
               <video
                 className={cn("stream", {
                   hidden: !videoRef.current || !videoStream,
@@ -56,13 +84,14 @@ function App() {
               />
             </div>
 
-            <ControlTray
-              videoRef={videoRef}
-              supportsVideo={true}
-              onVideoStreamChange={setVideoStream}
-            >
-              {/* put your own buttons here */}
-            </ControlTray>
+            {/* Only show the ControlTray for Gemini transcription */}
+            {currentPage === PageType.GEMINI && (
+              <ControlTray
+                videoRef={videoRef}
+                supportsVideo={false}
+                onVideoStreamChange={setVideoStream}
+              />
+            )}
           </main>
         </div>
       </LiveAPIProvider>

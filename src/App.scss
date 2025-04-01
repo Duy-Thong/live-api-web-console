@@ -144,6 +144,38 @@ body {
     gap: 1rem;
     max-width: 100%;
     overflow: hidden;
+
+    // Add page switcher styles
+    .page-switcher {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      width: 100%;
+      
+      .page-button {
+        background: var(--Neutral-20);
+        border: 1px solid var(--Neutral-30);
+        color: var(--Neutral-80);
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-family: var(--font-family);
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background: var(--Neutral-15);
+        }
+        
+        &.active {
+          background: var(--Blue-800);
+          color: var(--Blue-500);
+          border-color: var(--Blue-500);
+        }
+      }
+    }
   }
 
   .main-app-area {

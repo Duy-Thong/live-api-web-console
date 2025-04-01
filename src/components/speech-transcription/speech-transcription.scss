@@ -1,0 +1,110 @@
+.speech-transcription {
+  width: 80%;
+  max-width: 800px;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  background: var(--Neutral-10);
+  border: 1px solid var(--Neutral-20);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  .transcription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--Neutral-20);
+    
+    h2 {
+      font-family: var(--font-family);
+      color: var(--Neutral-90);
+      margin: 0;
+    }
+    
+    .status {
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: var(--Neutral-20);
+      color: var(--Neutral-60);
+      transition: all 0.3s ease;
+      
+      &.connected {
+        background: var(--Green-700);
+        color: var(--Green-500);
+        
+        &.processing {
+          background: var(--Blue-800);
+          color: var(--Blue-500);
+          animation: pulse 1.5s infinite;
+        }
+      }
+    }
+  }
+  
+  .transcription-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--Neutral-5);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    scroll-behavior: smooth;
+    
+    p {
+      color: var(--Neutral-90);
+      line-height: 1.6;
+      margin: 0;
+      white-space: pre-wrap;
+      
+      &.placeholder {
+        color: var(--Neutral-50);
+        font-style: italic;
+      }
+      
+      .cursor {
+        display: inline-block;
+        width: 2px;
+        height: 16px;
+        background-color: transparent;
+        margin-left: 2px;
+        vertical-align: middle;
+        
+        &.blinking {
+          background-color: var(--Blue-500);
+          animation: blink 1s infinite;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.latest-text {
+  color: #1a73e8;
+  font-weight: 600;
+  transition: color 0.5s ease-out;
+}
