@@ -20,6 +20,7 @@ import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import SidePanel from "./components/side-panel/SidePanel";
 import { SpeechTranscription } from "./components/speech-transcription/SpeechTranscription";
 import { DeepgramTranscription } from "./components/deepgram-transcription/DeepgramTranscription";
+import { KeywordExtraction } from "./components/keyword-extraction/KeywordExtraction";
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 
@@ -34,7 +35,8 @@ const uri = `wss://${host}/ws/google.ai.generativelanguage.v1alpha.GenerativeSer
 // Enum for page types
 enum PageType {
   GEMINI = "gemini",
-  DEEPGRAM = "deepgram"
+  DEEPGRAM = "deepgram",
+  KEYWORD = "keyword",
 }
 
 function App() {
@@ -66,13 +68,21 @@ function App() {
               >
                 Deepgram Transcription
               </button>
+              <button
+                className={cn("page-button", { active: currentPage === PageType.KEYWORD })}
+                onClick={() => setCurrentPage(PageType.KEYWORD)}
+              >
+                Keyword Extraction
+              </button>
             </div>
 
             <div className="main-app-area">
               {currentPage === PageType.GEMINI ? (
                 <SpeechTranscription />
-              ) : (
+              ) : currentPage === PageType.DEEPGRAM ? (
                 <DeepgramTranscription />
+              ) : (
+                <KeywordExtraction />
               )}
               <video
                 className={cn("stream", {
@@ -84,8 +94,8 @@ function App() {
               />
             </div>
 
-            {/* Only show the ControlTray for Gemini transcription */}
-            {currentPage === PageType.GEMINI && (
+            {/* Only show the ControlTray for Gemini transcription and Keyword extraction */}
+            {(currentPage === PageType.GEMINI || currentPage === PageType.KEYWORD) && (
               <ControlTray
                 videoRef={videoRef}
                 supportsVideo={false}
