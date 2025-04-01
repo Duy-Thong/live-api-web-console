@@ -36,7 +36,7 @@ export function SpeechTranscription() {
       systemInstruction: {
         parts: [
           {
-            text: "You are a real-time speech-to-text transcription service. Transcribe the audio input exactly as heard without adding anything extra. Format sentences properly but don't add commentary. Update the transcript incrementally with each new audio segment. Always respond in Japanese regardless of the input language."
+            text: "You are a real-time speech-to-text transcription service. Transcribe the audio input exactly as heard without adding anything extra. Format sentences properly but don't add commentary. Update the transcript incrementally with each new audio segment. Always respond in English regardless of the input language."
           },
         ],
       },
