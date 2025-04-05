@@ -57,7 +57,6 @@ interface MultimodalLiveClientEventTypes {
 
 export type MultimodalLiveAPIClientConnection = {
   url?: string;
-  apiKey: string;
 };
 
 /**
@@ -73,13 +72,9 @@ export class MultimodalLiveClient extends EventEmitter<MultimodalLiveClientEvent
     return { ...this.config };
   }
 
-  constructor({ url, apiKey }: MultimodalLiveAPIClientConnection) {
+  constructor({ url }: MultimodalLiveAPIClientConnection) {
     super();
-    url =
-      url ||
-      `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent`;
-    url += `?key=${apiKey}`;
-    this.url = url;
+    this.url = url || "ws://localhost:3001";
     this.send = this.send.bind(this);
   }
 
@@ -94,24 +89,37 @@ export class MultimodalLiveClient extends EventEmitter<MultimodalLiveClientEvent
 
   connect(config: LiveConfig): Promise<boolean> {
     this.config = config;
-
     const ws = new WebSocket(this.url);
 
     ws.addEventListener("message", async (evt: MessageEvent) => {
       if (evt.data instanceof Blob) {
         this.receive(evt.data);
       } else {
-        console.log("non blob message", evt);
+        try {
+          // Handle string responses by converting to blob
+          const data = JSON.parse(evt.data);
+          if (data.error) {
+            this.log(`server.error`, data.error);
+            this.emit("close", new CloseEvent("close", { reason: data.error }));
+            return;
+          }
+          this.receive(new Blob([evt.data], { type: 'application/json' }));
+        } catch (error) {
+          console.log("non blob message", evt);
+        }
       }
     });
+
     return new Promise((resolve, reject) => {
       const onError = (ev: Event) => {
         this.disconnect(ws);
-        const message = `Could not connect to "${this.url}"`;
+        const message = `Could not connect to "${this.url}". Make sure the backend server is running.`;
         this.log(`server.${ev.type}`, message);
         reject(new Error(message));
       };
+
       ws.addEventListener("error", onError);
+
       ws.addEventListener("open", (ev: Event) => {
         if (!this.config) {
           reject("Invalid config sent to `connect(config)`");

@@ -101,6 +101,29 @@ Project consists of:
 - communication layer for processing audio in and out
 - a boilerplate view for starting to build your apps and view logs
 
+### Getting Started
+
+1. Install dependencies for both frontend and backend:
+   ```
+   npm install
+   cd gemini-backend
+   npm install
+   cd ..
+   ```
+
+2. Start the backend WebSocket server:
+   ```
+   cd gemini-backend
+   npm start
+   ```
+
+3. In a new terminal, start the React dev server:
+   ```
+   npm start
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view the app in your browser.
+
 ## Available Scripts
 
 In the project directory, you can run:

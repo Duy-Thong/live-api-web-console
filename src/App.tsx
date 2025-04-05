@@ -24,13 +24,8 @@ import { KeywordExtraction } from "./components/keyword-extraction/KeywordExtrac
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 
-const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
-if (typeof API_KEY !== "string") {
-  throw new Error("set REACT_APP_GEMINI_API_KEY in .env");
-}
-
-const host = "generativelanguage.googleapis.com";
-const uri = `wss://${host}/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent`;
+// Use backend server URL instead of direct Gemini API connection
+const backendUrl = "ws://localhost:3001";
 
 // Enum for page types
 enum PageType {
@@ -50,7 +45,7 @@ function App() {
 
   return (
     <div className="App">
-      <LiveAPIProvider url={uri} apiKey={API_KEY}>
+      <LiveAPIProvider url={backendUrl}>
         <div className="streaming-console">
           <SidePanel />
           <main>
