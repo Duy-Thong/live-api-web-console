@@ -25,7 +25,7 @@ import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 
 // Use backend server URL instead of direct Gemini API connection
-const backendUrl = "ws://localhost:3001";
+const backendUrl = "ws://18.141.138.5:3001";
 
 // Enum for page types
 enum PageType {

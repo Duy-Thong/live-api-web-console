@@ -74,7 +74,7 @@ export class MultimodalLiveClient extends EventEmitter<MultimodalLiveClientEvent
 
   constructor({ url }: MultimodalLiveAPIClientConnection) {
     super();
-    this.url = url || "ws://localhost:3001";
+    this.url = url || "ws://18.141.138.5:3001";
     this.send = this.send.bind(this);
   }
 
